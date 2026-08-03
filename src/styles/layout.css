@@ -1,0 +1,103 @@
+/**
+ * Layout primitives — container + grid
+ * Адаптив через --layout-* / --grid-* из responsive.css
+ */
+
+.container-ds {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--layout-container-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  min-width: 0;
+}
+
+.container-ds--sm {
+  max-width: min(100%, var(--container-sm));
+}
+
+.container-ds--md {
+  max-width: min(100%, var(--container-md));
+}
+
+.container-ds--lg {
+  max-width: min(100%, var(--container-lg));
+}
+
+.container-ds--xl {
+  max-width: min(100%, var(--container-xl));
+}
+
+.container-ds--2xl {
+  max-width: min(100%, var(--container-2xl));
+}
+
+.container-ds--fluid {
+  max-width: 100%;
+}
+
+.section-ds {
+  padding-block: var(--section-y);
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.grid-ds {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  gap: var(--grid-gap);
+  width: 100%;
+  min-width: 0;
+}
+
+.grid-ds--gap-sm {
+  gap: var(--grid-gap-sm);
+}
+
+.grid-ds--gap-lg {
+  gap: var(--grid-gap-lg);
+}
+
+.grid-ds > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Column spans — adaptive collapse
+ * Small / Large Mobile (< md): all full width
+ * Tablet Vertical (md–lg): 4→6, 6→6
+ * Tablet Horizontal+ (lg): as authored
+ */
+.grid-ds__span-4 {
+  grid-column: span 12;
+}
+
+.grid-ds__span-6 {
+  grid-column: span 12;
+}
+
+.grid-ds__span-12 {
+  grid-column: span 12;
+}
+
+@media (width >= 768px) and (width < 1024px) {
+  .grid-ds__span-4 {
+    grid-column: span 6;
+  }
+
+  .grid-ds__span-6 {
+    grid-column: span 6;
+  }
+}
+
+@media (width >= 1024px) {
+  .grid-ds__span-4 {
+    grid-column: span 4;
+  }
+
+  .grid-ds__span-6 {
+    grid-column: span 6;
+  }
+}
+

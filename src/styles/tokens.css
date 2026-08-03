@@ -1,0 +1,278 @@
+/**
+ * Design Tokens — МойСервис
+ * Source of Truth (Stage 0 → code)
+ *
+ * Правила:
+ * 1. Компоненты используют только эти переменные (напрямую или через Tailwind @theme).
+ * 2. Новое значение → сначала токен здесь, потом UI.
+ * 3. Primitive → semantic alias; не дублировать hex в semantic-слое.
+ */
+
+:root {
+  /* ═══════════════════════════════════════════
+   * 1. COLOR — Primitives
+   * ═══════════════════════════════════════════ */
+
+  /* Brand */
+  --color-brand-purple: #6b2cf5;
+  --color-brand-purple-deep: #5a1fe0;
+  --color-brand-orange: #ff4d00;
+  --color-brand-orange-hover: #e64500;
+
+  /* Accent */
+  --color-accent-lime: #c8ff00;
+  --color-accent-lime-hover: #b8ed00;
+  --color-accent-lime-pressed: #a6d600;
+
+  /* Neutrals */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f3f3f3;
+  --color-neutral-100: #e0e0e0;
+  --color-neutral-200: #c8c8c8;
+  --color-neutral-700: #333333;
+  --color-neutral-800: #2a2a2a;
+  --color-neutral-850: #232323;
+  --color-neutral-900: #121212;
+  --color-neutral-950: #111111;
+  --color-neutral-1000: #000000;
+
+  /* Semantic system */
+  --color-semantic-error: #e53935;
+  --color-semantic-success: #2e7d32;
+  --color-semantic-focus: var(--color-brand-purple);
+
+  /* Alpha */
+  --color-alpha-white-08: rgb(255 255 255 / 0.08);
+  --color-alpha-black-08: rgb(17 17 17 / 0.08);
+  --color-alpha-black-25: rgb(0 0 0 / 0.25);
+  --color-alpha-black-35: rgb(0 0 0 / 0.35);
+  --color-alpha-black-55: rgb(0 0 0 / 0.55);
+  --color-alpha-purple-45: rgb(107 44 245 / 0.45);
+
+  /* ═══════════════════════════════════════════
+   * 2. COLOR — Semantic roles (page default = dark canvas)
+   * Sections override via [data-surface]
+   * ═══════════════════════════════════════════ */
+
+  --color-bg-page: var(--color-neutral-900);
+  --color-bg-hero: var(--color-brand-purple);
+  --color-bg-inverse: var(--color-neutral-0);
+
+  --color-surface: var(--color-neutral-850);
+  --color-surface-elevated: var(--color-neutral-800);
+  --color-surface-inverse: var(--color-neutral-0);
+  --color-surface-muted: var(--color-neutral-50);
+
+  --color-text: var(--color-neutral-0);
+  --color-text-muted: var(--color-neutral-200);
+  --color-text-inverse: var(--color-neutral-950);
+  --color-text-brand: var(--color-brand-orange);
+  --color-text-on-lime: var(--color-neutral-950);
+  --color-text-on-accent: var(--color-neutral-1000);
+
+  --color-border: var(--color-alpha-white-08);
+  --color-border-strong: var(--color-neutral-0);
+  --color-border-inverse: var(--color-neutral-950);
+
+  --color-overlay-scrim: var(--color-alpha-black-55);
+
+  /* Interactive aliases */
+  --color-action-primary: var(--color-accent-lime);
+  --color-action-primary-hover: var(--color-accent-lime-hover);
+  --color-action-primary-pressed: var(--color-accent-lime-pressed);
+  --color-action-primary-fg: var(--color-text-on-lime);
+  --color-focus-ring: var(--color-semantic-focus);
+
+  /* ═══════════════════════════════════════════
+   * 3. TYPOGRAPHY
+   * ═══════════════════════════════════════════ */
+
+  --font-family-display: var(--font-geologica), "Geologica", "Manrope", sans-serif;
+  --font-family-body: var(--font-manrope), "Manrope", "Geologica", sans-serif;
+
+  --font-size-xs: 0.75rem; /* 12 */
+  --font-size-sm: 0.875rem; /* 14 */
+  --font-size-md: 1rem; /* 16 */
+  --font-size-lg: 1.125rem; /* 18 */
+  --font-size-xl: 1.25rem; /* 20 */
+  --font-size-2xl: 1.5rem; /* 24 */
+  --font-size-3xl: 2rem; /* 32 */
+  --font-size-4xl: 2.5rem; /* 40 */
+  --font-size-5xl: 3rem; /* 48 */
+  --font-size-6xl: 3.5rem; /* 56 */
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  --line-height-tight: 1.05;
+  --line-height-snug: 1.15;
+  --line-height-normal: 1.4;
+  --line-height-relaxed: 1.55;
+
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.04em;
+  --letter-spacing-wider: 0.08em;
+
+  /* ═══════════════════════════════════════════
+   * 4. RADIUS
+   * ═══════════════════════════════════════════ */
+
+  --radius-none: 0;
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 32px;
+  --radius-xl: 48px;
+  --radius-2xl: 64px;
+  --radius-3xl: 80px;
+  --radius-pill: 9999px;
+
+  /* ═══════════════════════════════════════════
+   * 5. SPACING (4-based)
+   * ═══════════════════════════════════════════ */
+
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --space-10: 64px;
+  --space-11: 80px;
+  --space-12: 96px;
+  --space-13: 128px;
+
+  /* ═══════════════════════════════════════════
+   * 6. LAYOUT — Container / Gutter / Section
+   * Adaptive overrides: see responsive.css
+   * ═══════════════════════════════════════════ */
+
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1200px;
+  --container-2xl: 1320px;
+
+  /* Active layout tokens (overridden per breakpoint in responsive.css) */
+  --layout-container-max: 100%;
+  --gutter: var(--space-4);
+  --section-y: var(--space-10);
+  --grid-gap: var(--space-4);
+  --grid-gap-sm: var(--space-3);
+  --grid-gap-lg: var(--space-5);
+  --card-padding: var(--space-4);
+  --card-padding-lg: var(--space-5);
+  --button-min-height: 2.75rem; /* 44px touch target */
+  --button-px: var(--space-5);
+  --image-radius: var(--radius-md);
+  --type-display-h1: var(--font-size-4xl);
+  --type-display-h2: var(--font-size-3xl);
+  --type-display-h3: var(--font-size-2xl);
+  --type-display-h4: var(--font-size-xl);
+
+  /* ═══════════════════════════════════════════
+   * 7. GRID
+   * ═══════════════════════════════════════════ */
+
+  --grid-columns: 12;
+
+  /* ═══════════════════════════════════════════
+   * 8. BREAKPOINTS
+   * Named ranges (mobile-first min-width):
+   *   Small Mobile      < 480
+   *   Large Mobile      ≥ 480  (sm)
+   *   Tablet Vertical   ≥ 768  (md)
+   *   Tablet Horizontal ≥ 1024 (lg)
+   *   Laptop            ≥ 1280 (xl)
+   *   Desktop           ≥ 1440 (2xl)
+   *   Large Desktop     ≥ 1920 (3xl)
+   * Tailwind @theme --breakpoint-* must match exactly.
+   * ═══════════════════════════════════════════ */
+
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1440px;
+  --breakpoint-3xl: 1920px;
+
+  /* ═══════════════════════════════════════════
+   * 9. SHADOW / ELEVATION
+   * ═══════════════════════════════════════════ */
+
+  --shadow-none: none;
+  --shadow-sm: 0 4px 16px var(--color-alpha-black-25);
+  --shadow-md: 0 12px 40px var(--color-alpha-black-35);
+  /* Dual ring: white halo for contrast on purple hero + brand purple outer */
+  --shadow-focus: 0 0 0 2px var(--color-neutral-0),
+    0 0 0 5px var(--color-brand-purple);
+
+  /* ═══════════════════════════════════════════
+   * 10. BORDER
+   * ═══════════════════════════════════════════ */
+
+  --border-width-hairline: 1px;
+  --border-width-thin: 2px;
+  --border-width-frame: 10px;
+  --border-width-frame-lg: 14px;
+  --border-style-solid: solid;
+
+  /* ═══════════════════════════════════════════
+   * 11. MOTION
+   * ═══════════════════════════════════════════ */
+
+  --motion-duration-fast: 150ms;
+  --motion-duration-normal: 300ms;
+  --motion-duration-enter: 350ms; /* UI Motion Library cap */
+  --motion-duration-slow: 500ms; /* CSS-only / rare; avoid in FM library */
+  --motion-duration-hero: 800ms; /* CSS-only / rare; avoid in FM library */
+
+  --motion-easing-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-easing-emphasized: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --motion-easing-linear: linear;
+
+  --motion-delay-stagger: 80ms;
+
+  /* ═══════════════════════════════════════════
+   * 12. Z-INDEX
+   * ═══════════════════════════════════════════ */
+
+  --z-base: 0;
+  --z-content: 1;
+  --z-overlap: 5;
+  --z-sticky: 20;
+  --z-header: 30;
+  --z-dropdown: 40;
+  --z-overlay: 50;
+  --z-modal: 60;
+  --z-toast: 70;
+
+  /* ═══════════════════════════════════════════
+   * 13. ICON
+   * ═══════════════════════════════════════════ */
+
+  --icon-size-sm: 16px;
+  --icon-size-md: 20px;
+  --icon-size-lg: 24px;
+  --icon-badge-size: 48px;
+  --icon-badge-bg: var(--color-brand-purple);
+  --icon-badge-fg: var(--color-neutral-0);
+
+  /* ═══════════════════════════════════════════
+   * 14. OPACITY
+   * ═══════════════════════════════════════════ */
+
+  --opacity-disabled: 0.4;
+  --opacity-muted: 0.7;
+  --opacity-overlay: 0.55;
+}
+
+/* Adaptive token overrides live in responsive.css (single SoT). */

@@ -1,0 +1,86 @@
+/**
+ * Services section — dark cards, media rhythm, lime rail (refs).
+ */
+
+.services {
+  position: relative;
+}
+
+/* Lime vertical accent on mobile (R4) */
+.services::after {
+  content: "";
+  position: absolute;
+  top: 12%;
+  right: 0;
+  width: 3px;
+  height: 48%;
+  border-radius: var(--radius-pill) 0 0 var(--radius-pill);
+  background: var(--color-action-primary);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+@media (width >= 1024px) {
+  .services::after {
+    display: none;
+  }
+}
+
+.services__heading {
+  text-align: center;
+}
+
+.services__grid {
+  align-items: stretch;
+}
+
+.service-card {
+  cursor: default;
+}
+
+.service-card__body {
+  min-width: 0;
+}
+
+.service-card__title {
+  letter-spacing: 0.04em;
+}
+
+.service-card__text {
+  color: var(--color-neutral-0);
+  opacity: 0.92;
+}
+
+.service-card__icon {
+  margin-bottom: 0.15rem;
+}
+
+.service-card__media {
+  --image-radius: var(--radius-md);
+}
+
+/* Media-bottom cards: push media to foot for even rhythm */
+.service-card--media-bottom .service-card__body {
+  flex: 1 1 auto;
+}
+
+.service-card--media-bottom .service-card__media {
+  margin-top: auto;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .service-card.card-ds--interactive:hover .service-card__media img {
+    transform: scale(1.03);
+  }
+
+  .service-card__media img {
+    transition: transform var(--motion-duration-normal)
+      var(--motion-easing-standard);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card.card-ds--interactive:hover .service-card__media img {
+    transform: none;
+  }
+}

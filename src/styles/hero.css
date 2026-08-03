@@ -1,0 +1,308 @@
+/**
+ * Hero section — purple plane, media frame, lime ticker (refs).
+ * Fixed viewport budget: shell ≤ 100dvh to avoid first-screen overflow.
+ */
+
+.hero {
+  --hero-inset-x: clamp(1rem, 3.5vw, 3.5rem);
+  --hero-inset-y: clamp(0.75rem, 2vw, 1.5rem);
+  --hero-frame-radius: var(--radius-xl);
+  --hero-plane-radius: var(--radius-2xl);
+  --hero-ticker-height: 2.75rem;
+}
+
+@media (width >= 1024px) {
+  .hero {
+    --hero-inset-x: clamp(2rem, 4vw, 4rem);
+    --hero-inset-y: clamp(0.5rem, 1.5vw, 1.25rem);
+    --hero-frame-radius: var(--radius-2xl);
+    --hero-plane-radius: var(--radius-3xl);
+    --hero-ticker-height: 3rem;
+  }
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  background: var(--color-bg-page);
+  overflow: clip;
+}
+
+.hero__plane {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  padding:
+    calc(var(--header-height) + var(--hero-inset-y))
+    var(--hero-inset-x)
+    var(--hero-inset-y);
+  background: var(--color-bg-hero);
+  border-bottom-left-radius: var(--hero-plane-radius);
+  border-bottom-right-radius: var(--hero-plane-radius);
+}
+
+.hero__frame-slot {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  width: 100%;
+}
+
+.hero__frame-slot > * {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+.hero__cta {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  padding-top: clamp(0.75rem, 1.5vw, 1.25rem);
+}
+
+/* ── HeroFrame ── */
+
+.hero-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 12rem;
+  overflow: hidden;
+  border-radius: var(--hero-frame-radius);
+  background: var(--color-neutral-900);
+  isolation: isolate;
+}
+
+.hero-frame__media {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-frame__media img {
+  object-fit: cover;
+  /* Bias toward probe / hands — multimeter stays readable on the left */
+  object-position: 58% center;
+}
+
+.hero-frame__shade {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / 0.08) 0%,
+      transparent 28%,
+      transparent 55%,
+      rgb(0 0 0 / 0.28) 100%
+    );
+}
+
+.hero-frame__caption {
+  position: absolute;
+  top: clamp(0.75rem, 2vw, 1.5rem);
+  right: clamp(0.75rem, 2vw, 1.5rem);
+  z-index: 2;
+  max-width: min(16rem, 70%);
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-neutral-0);
+  color: var(--color-neutral-950);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-align: center;
+  text-transform: lowercase;
+}
+
+.hero-frame__brand {
+  position: absolute;
+  z-index: 2;
+  bottom: clamp(0.75rem, 2vw, 1.5rem);
+  left: clamp(0.75rem, 2vw, 1.5rem);
+  display: flex;
+  align-items: flex-end;
+  gap: 0.65rem;
+  max-width: calc(100% - 2rem);
+}
+
+.hero-frame__brand-tab {
+  padding: 0.65rem 0.9rem 0.7rem;
+  border-radius: var(--radius-md);
+  background: var(--color-neutral-0);
+  box-shadow: 0 0 0 2px rgb(255 255 255 / 0.35);
+}
+
+@media (width >= 1024px) {
+  .hero-frame__brand-tab {
+    padding: 0.85rem 1.15rem 0.95rem;
+    border-radius: var(--radius-lg);
+  }
+}
+
+.hero-frame__title {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(1.35rem, 3.2vw, 2.25rem);
+  font-weight: var(--font-weight-extrabold);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-brand-orange);
+}
+
+.hero-frame__brand-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1em;
+}
+
+.hero-frame__brand-stack span {
+  font-family: var(--font-family-display);
+  font-size: clamp(1.15rem, 5.5vw, 1.65rem);
+  font-weight: var(--font-weight-extrabold);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-brand-orange);
+}
+
+.hero-frame__spark {
+  flex-shrink: 0;
+  width: clamp(1.25rem, 2.5vw, 1.75rem);
+  height: clamp(1.25rem, 2.5vw, 1.75rem);
+  color: var(--color-neutral-0);
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.35));
+}
+
+@media (width < 1024px) {
+  .hero-frame__spark {
+    display: none;
+  }
+}
+
+/* ── Ticker ── */
+
+.ticker-bar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  height: var(--hero-ticker-height);
+  overflow: hidden;
+  background: var(--color-action-primary);
+  color: var(--color-action-primary-fg);
+}
+
+.ticker-bar__viewport {
+  width: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 4%,
+    #000 96%,
+    transparent 100%
+  );
+}
+
+.ticker-bar__track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: 0;
+  animation: hero-ticker 36s linear infinite;
+  will-change: transform;
+}
+
+.ticker-bar__group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.85rem;
+  padding-inline: 1.25rem;
+  white-space: nowrap;
+}
+
+.ticker-bar__item {
+  font-family: var(--font-family-display);
+  font-size: clamp(0.7rem, 1.4vw, 0.875rem);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ticker-bar__sep {
+  display: inline-block;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: var(--radius-pill);
+  background: currentColor;
+  opacity: 0.55;
+}
+
+@keyframes hero-ticker {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-bar__track {
+    animation: none;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .ticker-bar__group:nth-child(n + 2) {
+    display: none;
+  }
+
+  .ticker-bar__viewport {
+    mask-image: none;
+  }
+}
+
+/* Short viewports — keep CTA + frame in fold */
+@media (max-height: 700px) {
+  .hero__cta {
+    padding-top: 0.5rem;
+  }
+
+  .hero-frame__caption {
+    top: 0.55rem;
+    right: 0.55rem;
+    padding: 0.3rem 0.65rem;
+  }
+
+  .hero-frame__brand {
+    bottom: 0.55rem;
+    left: 0.55rem;
+  }
+
+  .hero-frame__brand-tab {
+    padding: 0.5rem 0.7rem;
+  }
+
+  .hero-frame__title {
+    font-size: clamp(1.1rem, 2.8vw, 1.6rem);
+  }
+
+  .hero-frame__brand-stack span {
+    font-size: clamp(0.95rem, 4.5vw, 1.25rem);
+  }
+
+  .hero-frame__brand-stack span:nth-child(n + 5) {
+    display: none;
+  }
+}

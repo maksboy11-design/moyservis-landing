@@ -1,0 +1,173 @@
+/**
+ * Tailwind v4 @theme bridge
+ * Maps Design Tokens → utility classes (bg-*, text-*, rounded-*, …)
+ *
+ * Правило: значения только через var(--token). Без повторного hex.
+ */
+
+@theme inline {
+  /* ── Colors: brand / accent ── */
+  --color-brand-purple: var(--color-brand-purple);
+  --color-brand-purple-deep: var(--color-brand-purple-deep);
+  --color-brand-orange: var(--color-brand-orange);
+  --color-brand-orange-hover: var(--color-brand-orange-hover);
+
+  --color-accent-lime: var(--color-accent-lime);
+  --color-accent-lime-hover: var(--color-accent-lime-hover);
+  --color-accent-lime-pressed: var(--color-accent-lime-pressed);
+
+  /* ── Colors: semantic roles ── */
+  --color-bg-page: var(--color-bg-page);
+  --color-bg-hero: var(--color-bg-hero);
+  --color-bg-inverse: var(--color-bg-inverse);
+
+  --color-surface: var(--color-surface);
+  --color-surface-elevated: var(--color-surface-elevated);
+  --color-surface-inverse: var(--color-surface-inverse);
+  --color-surface-muted: var(--color-surface-muted);
+
+  --color-foreground: var(--color-text);
+  --color-foreground-muted: var(--color-text-muted);
+  --color-foreground-inverse: var(--color-text-inverse);
+  --color-foreground-brand: var(--color-text-brand);
+  --color-foreground-on-lime: var(--color-text-on-lime);
+  --color-foreground-on-accent: var(--color-text-on-accent);
+
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+  --color-border-inverse: var(--color-border-inverse);
+
+  --color-action-primary: var(--color-action-primary);
+  --color-action-primary-hover: var(--color-action-primary-hover);
+  --color-action-primary-pressed: var(--color-action-primary-pressed);
+  --color-action-primary-fg: var(--color-action-primary-fg);
+
+  --color-error: var(--color-semantic-error);
+  --color-success: var(--color-semantic-success);
+  --color-focus: var(--color-focus-ring);
+  --color-overlay-scrim: var(--color-overlay-scrim);
+
+  /* Neutrals (escape hatch for explicit needs) */
+  --color-neutral-0: var(--color-neutral-0);
+  --color-neutral-50: var(--color-neutral-50);
+  --color-neutral-100: var(--color-neutral-100);
+  --color-neutral-200: var(--color-neutral-200);
+  --color-neutral-700: var(--color-neutral-700);
+  --color-neutral-800: var(--color-neutral-800);
+  --color-neutral-850: var(--color-neutral-850);
+  --color-neutral-900: var(--color-neutral-900);
+  --color-neutral-950: var(--color-neutral-950);
+  --color-neutral-1000: var(--color-neutral-1000);
+
+  /* ── Typography ── */
+  --font-display: var(--font-family-display);
+  --font-body: var(--font-family-body);
+
+  --text-xs: var(--font-size-xs);
+  --text-sm: var(--font-size-sm);
+  --text-md: var(--font-size-md);
+  --text-lg: var(--font-size-lg);
+  --text-xl: var(--font-size-xl);
+  --text-2xl: var(--font-size-2xl);
+  --text-3xl: var(--font-size-3xl);
+  --text-4xl: var(--font-size-4xl);
+  --text-5xl: var(--font-size-5xl);
+  --text-6xl: var(--font-size-6xl);
+
+  --font-weight-regular: var(--font-weight-regular);
+  --font-weight-medium: var(--font-weight-medium);
+  --font-weight-semibold: var(--font-weight-semibold);
+  --font-weight-bold: var(--font-weight-bold);
+  --font-weight-extrabold: var(--font-weight-extrabold);
+
+  --leading-tight: var(--line-height-tight);
+  --leading-snug: var(--line-height-snug);
+  --leading-normal: var(--line-height-normal);
+  --leading-relaxed: var(--line-height-relaxed);
+
+  --tracking-tight: var(--letter-spacing-tight);
+  --tracking-normal: var(--letter-spacing-normal);
+  --tracking-wide: var(--letter-spacing-wide);
+  --tracking-wider: var(--letter-spacing-wider);
+
+  /* ── Radius ── */
+  --radius-none: var(--radius-none);
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+  --radius-3xl: var(--radius-3xl);
+  --radius-pill: var(--radius-pill);
+
+  /* ── Spacing ── */
+  --spacing-0: var(--space-0);
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-5: var(--space-5);
+  --spacing-6: var(--space-6);
+  --spacing-7: var(--space-7);
+  --spacing-8: var(--space-8);
+  --spacing-9: var(--space-9);
+  --spacing-10: var(--space-10);
+  --spacing-11: var(--space-11);
+  --spacing-12: var(--space-12);
+  --spacing-13: var(--space-13);
+
+  /* Layout aliases as spacing utilities */
+  --spacing-gutter: var(--gutter);
+  --spacing-section-y: var(--section-y);
+  --spacing-grid-gap: var(--grid-gap);
+  --spacing-grid-gap-sm: var(--grid-gap-sm);
+  --spacing-grid-gap-lg: var(--grid-gap-lg);
+
+  /* ── Container ── */
+  --container-sm: var(--container-sm);
+  --container-md: var(--container-md);
+  --container-lg: var(--container-lg);
+  --container-xl: var(--container-xl);
+  --container-2xl: var(--container-2xl);
+
+  /* ── Breakpoints
+   * Static lengths required by Tailwind media-query codegen.
+   * MUST match --breakpoint-* in tokens.css (single numeric source of truth there).
+   * Named: sm Large Mobile · md Tablet V · lg Tablet H ·
+   *        xl Laptop · 2xl Desktop · 3xl Large Desktop
+   * ── */
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1440px;
+  --breakpoint-3xl: 1920px;
+
+  /* ── Shadow ── */
+  --shadow-none: var(--shadow-none);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-focus: var(--shadow-focus);
+
+  /* ── Motion (for transition utilities if used) ── */
+  --ease-standard: var(--motion-easing-standard);
+  --ease-emphasized: var(--motion-easing-emphasized);
+  --ease-linear: var(--motion-easing-linear);
+
+  --animate-duration-fast: var(--motion-duration-fast);
+  --animate-duration-normal: var(--motion-duration-normal);
+  --animate-duration-slow: var(--motion-duration-slow);
+  --animate-duration-hero: var(--motion-duration-hero);
+
+  /* ── Z-index ── */
+  --z-index-base: var(--z-base);
+  --z-index-content: var(--z-content);
+  --z-index-overlap: var(--z-overlap);
+  --z-index-sticky: var(--z-sticky);
+  --z-index-header: var(--z-header);
+  --z-index-dropdown: var(--z-dropdown);
+  --z-index-overlay: var(--z-overlay);
+  --z-index-modal: var(--z-modal);
+  --z-index-toast: var(--z-toast);
+}

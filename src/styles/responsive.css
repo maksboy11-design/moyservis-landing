@@ -1,0 +1,222 @@
+/**
+ * Responsive Design System — единые правила адаптации
+ *
+ * Breakpoints (min-width, mobile-first):
+ *   Small Mobile      default (< 480)
+ *   Large Mobile      ≥ 480   (sm)
+ *   Tablet Vertical   ≥ 768   (md)
+ *   Tablet Horizontal ≥ 1024  (lg)
+ *   Laptop            ≥ 1280  (xl)
+ *   Desktop           ≥ 1440  (2xl)
+ *   Large Desktop     ≥ 1920  (3xl)
+ *
+ * Правила: Container · Grid/Columns · Typography · Spacing ·
+ * Image · Navigation · Card · Button.
+ * Компоненты обязаны использовать только эти токены / классы.
+ *
+ * QA widths: 1920, 1440, 1366, 1024, 768, 480, 390, 375, 360, 320
+ * Запрещено: horizontal scroll · overlap · overflow · text clip
+ */
+
+/* ═══════════════════════════════════════════
+ * BASE — Small Mobile (< 480)
+ * ═══════════════════════════════════════════ */
+
+:root {
+  --layout-container-max: 100%;
+  --gutter: var(--space-4);
+  --section-y: var(--space-10);
+  --grid-gap: var(--space-4);
+  --grid-gap-sm: var(--space-3);
+  --grid-gap-lg: var(--space-5);
+  --card-padding: var(--space-4);
+  --card-padding-lg: var(--space-5);
+  --button-min-height: 2.75rem;
+  --button-px: var(--space-5);
+  --image-radius: var(--radius-md);
+  --type-display-h1: var(--font-size-4xl);
+  --type-display-h2: var(--font-size-3xl);
+  --type-display-h3: var(--font-size-2xl);
+  --type-display-h4: var(--font-size-xl);
+  --nav-desktop-display: none;
+  --nav-mobile-display: flex;
+  --card-lift: 0px;
+}
+
+/* Large Mobile ≥ 480 */
+@media (width >= 480px) {
+  :root {
+    --gutter: var(--space-5);
+    --grid-gap: var(--space-5);
+    --grid-gap-sm: var(--space-4);
+    --grid-gap-lg: var(--space-6);
+    --card-padding: var(--space-5);
+    --button-px: var(--space-6);
+  }
+}
+
+/* Tablet Vertical ≥ 768 */
+@media (width >= 768px) {
+  :root {
+    --layout-container-max: var(--container-md);
+    --gutter: var(--space-6);
+    --section-y: var(--space-11);
+    --grid-gap: var(--space-6);
+    --grid-gap-lg: var(--space-7);
+    --card-padding: var(--space-6);
+    --card-padding-lg: var(--space-7);
+    --type-display-h1: var(--font-size-5xl);
+    --type-display-h2: var(--font-size-4xl);
+    --type-display-h3: var(--font-size-3xl);
+    --type-display-h4: var(--font-size-2xl);
+    --card-lift: 2px;
+  }
+}
+
+/* Tablet Horizontal ≥ 1024 — desktop nav */
+@media (width >= 1024px) {
+  :root {
+    --layout-container-max: var(--container-lg);
+    --gutter: var(--space-7);
+    --section-y: var(--space-12);
+    --grid-gap: var(--space-7);
+    --type-display-h1: var(--font-size-6xl);
+    --nav-desktop-display: flex;
+    --nav-mobile-display: none;
+    --card-lift: 4px;
+  }
+}
+
+/* Laptop ≥ 1280 */
+@media (width >= 1280px) {
+  :root {
+    --layout-container-max: var(--container-xl);
+    --grid-gap-lg: var(--space-8);
+  }
+}
+
+/* Desktop ≥ 1440 */
+@media (width >= 1440px) {
+  :root {
+    --layout-container-max: var(--container-2xl);
+    --gutter: var(--space-8);
+    --section-y: var(--space-13);
+  }
+}
+
+/* Large Desktop ≥ 1920 — cap width, breathe with gutters */
+@media (width >= 1920px) {
+  :root {
+    --layout-container-max: var(--container-2xl);
+    --gutter: var(--space-9);
+  }
+}
+
+/* ═══════════════════════════════════════════
+ * OVERFLOW GUARDS — no horizontal scroll
+ * ═══════════════════════════════════════════ */
+
+html {
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
+img,
+svg,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Text never clips by overflow-hidden on typography wrappers */
+.type-ds,
+.type-ds * {
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+/* ═══════════════════════════════════════════
+ * IMAGE SCALING
+ * ═══════════════════════════════════════════ */
+
+.media-ds {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--image-radius);
+  object-fit: cover;
+}
+
+.media-ds--contain {
+  object-fit: contain;
+}
+
+.media-ds__frame {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: var(--image-radius);
+}
+
+.media-ds__frame > img,
+.media-ds__frame > .media-ds {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+/* ═══════════════════════════════════════════
+ * NAVIGATION BEHAVIOUR
+ * ═══════════════════════════════════════════ */
+
+.nav-desktop {
+  display: var(--nav-desktop-display);
+}
+
+.nav-mobile {
+  display: var(--nav-mobile-display);
+}
+
+/* ═══════════════════════════════════════════
+ * CARD BEHAVIOUR
+ * ═══════════════════════════════════════════ */
+
+.card-ds {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-ds--interactive:hover {
+    transform: translateY(calc(var(--card-lift) * -1));
+  }
+}
+
+/* ═══════════════════════════════════════════
+ * BUTTON BEHAVIOUR
+ * ═══════════════════════════════════════════ */
+
+.btn-ds {
+  max-width: 100%;
+  min-height: var(--button-min-height);
+  /* Small Mobile: allow wrap — no text clip */
+  white-space: normal;
+  text-align: center;
+}
+
+@media (width >= 480px) {
+  .btn-ds {
+    white-space: nowrap;
+  }
+}

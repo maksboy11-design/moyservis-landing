@@ -1,0 +1,40 @@
+/**
+ * Advantages — icon+title+text cards, purple badges, hover lift (DS).
+ */
+
+.advantages__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.advantages__lead {
+  max-width: 36rem;
+  margin-inline: auto;
+}
+
+.advantages__grid {
+  align-items: stretch;
+}
+
+.trust-fact--card {
+  cursor: default;
+}
+
+.trust-fact--card .trust-fact__title {
+  letter-spacing: 0.04em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .trust-fact--card.card-ds--interactive:hover .trust-fact__badge {
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trust-fact--card.card-ds--interactive:hover .trust-fact__badge {
+    transform: none;
+  }
+}

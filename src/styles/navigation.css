@@ -1,0 +1,94 @@
+/**
+ * Sticky header + mobile navigation drawer.
+ * Heights match refs: compact mobile bar · taller desktop spread-nav.
+ * Durations / easing from design tokens (~300ms state change).
+ */
+
+:root {
+  --header-height: 4rem; /* 64px mobile */
+}
+
+@media (width >= 1024px) {
+  :root {
+    --header-height: 5rem; /* 80px desktop */
+  }
+}
+
+.site-header {
+  /* Reserve paint layer — avoids flicker when toggling backdrop-filter */
+  will-change: background-color, backdrop-filter;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header {
+    transition-duration: 0.01ms !important;
+    will-change: auto;
+  }
+}
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  pointer-events: none;
+}
+
+.mobile-menu--open {
+  pointer-events: auto;
+}
+
+.mobile-menu__scrim {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: var(--color-overlay-scrim);
+  opacity: 0;
+  transition: opacity var(--motion-duration-normal) var(--motion-easing-standard);
+}
+
+.mobile-menu--open .mobile-menu__scrim {
+  opacity: 1;
+}
+
+.mobile-menu__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 22rem);
+  height: 100%;
+  padding: calc(var(--header-height) + var(--space-4)) var(--gutter) var(--space-7);
+  background: var(--color-brand-purple);
+  color: var(--color-neutral-0);
+  box-shadow: var(--shadow-md);
+  transform: translateX(100%);
+  opacity: 0.96;
+  transition:
+    transform var(--motion-duration-slow) var(--motion-easing-emphasized),
+    visibility 0s linear var(--motion-duration-slow);
+  visibility: hidden;
+}
+
+.mobile-menu--open .mobile-menu__panel {
+  transform: translateX(0);
+  visibility: visible;
+  transition:
+    transform var(--motion-duration-slow) var(--motion-easing-emphasized),
+    visibility 0s linear 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu__scrim,
+  .mobile-menu__panel {
+    transition-duration: 0.01ms;
+  }
+}
+
+@media (width >= 1024px) {
+  .mobile-menu {
+    display: none;
+  }
+}

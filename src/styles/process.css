@@ -1,0 +1,189 @@
+/**
+ * Process timeline — vertical (mobile) · horizontal (desktop).
+ * Sequence readable at any width; connectors are decorative.
+ */
+
+.process {
+  --process-marker: 2.75rem;
+  --process-rail: 2px;
+  --process-gap: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.process__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.process__lead {
+  max-width: 36rem;
+  margin-inline: auto;
+}
+
+.process__cta {
+  display: flex;
+  justify-content: center;
+  padding-top: 0.25rem;
+}
+
+/* ── Timeline shell ── */
+
+.process-timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.process-timeline__item {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+/* Vertical rail (mobile) */
+.process-timeline__item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: var(--process-marker);
+  left: calc(var(--process-marker) / 2);
+  width: var(--process-rail);
+  height: calc(100% - 0.15rem);
+  transform: translateX(-50%);
+  background: linear-gradient(
+    180deg,
+    var(--color-action-primary) 0%,
+    rgb(200 255 0 / 0.25) 100%
+  );
+  pointer-events: none;
+}
+
+.process-step {
+  display: grid;
+  grid-template-columns: var(--process-marker) minmax(0, 1fr);
+  column-gap: 1rem;
+  align-items: start;
+  padding-bottom: var(--process-gap);
+}
+
+.process-timeline__item:last-child .process-step {
+  padding-bottom: 0;
+}
+
+.process-step__marker {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: var(--process-marker);
+  height: var(--process-marker);
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  background: var(--color-action-primary);
+  color: var(--color-action-primary-fg);
+  box-shadow: 0 0 0 4px var(--color-bg-page);
+}
+
+.process-step__index {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-extrabold);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.process-step__content {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-top: 0.35rem;
+}
+
+.process-step__title {
+  font-size: clamp(1rem, 2.8vw, 1.25rem) !important;
+  letter-spacing: 0.04em;
+}
+
+.process-step__body {
+  font-size: clamp(0.875rem, 2.2vw, 1rem);
+  line-height: 1.55;
+}
+
+/* ── Desktop: horizontal track ── */
+
+@media (width >= 1024px) {
+  .process {
+    --process-marker: 3rem;
+  }
+
+  .process-timeline {
+    flex-direction: row;
+    align-items: stretch;
+    gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  }
+
+  /* Continuous track behind markers */
+  .process-timeline::before {
+    content: "";
+    position: absolute;
+    top: calc(var(--process-marker) / 2);
+    left: calc(var(--process-marker) / 2);
+    right: calc(var(--process-marker) / 2);
+    height: var(--process-rail);
+    transform: translateY(-50%);
+    background: linear-gradient(
+      90deg,
+      var(--color-action-primary) 0%,
+      rgb(200 255 0 / 0.35) 50%,
+      var(--color-action-primary) 100%
+    );
+    pointer-events: none;
+  }
+
+  .process-timeline__item {
+    flex: 1 1 0;
+  }
+
+  .process-timeline__item:not(:last-child)::after {
+    display: none;
+  }
+
+  .process-step {
+    grid-template-columns: 1fr;
+    row-gap: 1rem;
+    justify-items: start;
+    padding-bottom: 0;
+    height: 100%;
+  }
+
+  .process-step__marker {
+    justify-self: start;
+  }
+
+  .process-step__content {
+    padding-top: 0;
+    flex: 1 1 auto;
+  }
+}
+
+/* Mid tablet: still vertical but slightly roomier markers */
+@media (width >= 640px) and (width < 1024px) {
+  .process {
+    --process-marker: 3rem;
+    --process-gap: 1.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-timeline__item:not(:last-child)::after,
+  .process-timeline::before {
+    transition: none;
+  }
+}

@@ -1,0 +1,34 @@
+/**
+ * Legacy CSS reveal — prefer `@/components/motion` ScrollReveal (Framer).
+ * Kept for zero-JS fallbacks / progressive enhancement.
+ * Durations & easing from design tokens only.
+ */
+
+.reveal {
+  transition-property: opacity, transform;
+  transition-duration: var(--motion-duration-normal);
+  transition-timing-function: var(--motion-easing-emphasized);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal--hidden {
+  opacity: 0;
+  transform: translateY(var(--space-4));
+}
+
+.reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal--hidden,
+  .reveal--visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+}

@@ -1,0 +1,60 @@
+/**
+ * Surface contexts — light / dark islands inside the page
+ *
+ * PRD: theme switcher / dark-mode toggle — вне scope v1.
+ * Рефы: тёмный canvas + светлые острова (About panel, frames).
+ *
+ * Использование:
+ *   <section data-surface="dark">…</section>
+ *   <section data-surface="light">…</section>
+ *
+ * Semantic tokens (--color-text, --color-surface, …) переключаются
+ * без дублирования hex — только alias на primitives.
+ */
+
+[data-surface="dark"] {
+  --color-surface: var(--color-neutral-850);
+  --color-surface-elevated: var(--color-neutral-800);
+  --color-text: var(--color-neutral-0);
+  --color-text-muted: var(--color-neutral-200);
+  --color-text-inverse: var(--color-neutral-950);
+  --color-border: var(--color-alpha-white-08);
+  --color-border-strong: var(--color-neutral-0);
+  color: var(--color-text);
+  background-color: var(--color-bg-page);
+}
+
+[data-surface="light"] {
+  --color-surface: var(--color-neutral-0);
+  --color-surface-elevated: var(--color-neutral-50);
+  --color-text: var(--color-neutral-950);
+  --color-text-muted: var(--color-neutral-700);
+  --color-text-inverse: var(--color-neutral-0);
+  --color-border: var(--color-alpha-black-08);
+  --color-border-strong: var(--color-neutral-950);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+}
+
+/**
+ * Optional future global theme flip (не UI-toggle в v1).
+ * Готовность к масштабированию без переписывания компонентов.
+ */
+[data-theme="light"] {
+  --color-bg-page: var(--color-neutral-0);
+  --color-bg-hero: var(--color-brand-purple);
+  --color-bg-inverse: var(--color-neutral-900);
+
+  --color-surface: var(--color-neutral-50);
+  --color-surface-elevated: var(--color-neutral-0);
+  --color-surface-inverse: var(--color-neutral-850);
+  --color-surface-muted: var(--color-neutral-100);
+
+  --color-text: var(--color-neutral-950);
+  --color-text-muted: var(--color-neutral-700);
+  --color-text-inverse: var(--color-neutral-0);
+
+  --color-border: var(--color-alpha-black-08);
+  --color-border-strong: var(--color-neutral-950);
+  --color-border-inverse: var(--color-neutral-0);
+}

@@ -16,21 +16,36 @@ export class LeadSubmitError extends Error {
 
 /**
  * Client → POST /api/leads
- * Ready to swap for Server Action later without changing form UI.
+ * Server re-validates with the same Zod schema.
  */
 export async function submitLead(data: LeadInput): Promise<{ id: string }> {
-  const response = await fetch("/api/leads", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify(data),
-  });
+  let response: Response;
+
+  try {
+    response = await fetch("/api/leads", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+  } catch {
+    throw new LeadSubmitError(
+      "Нет соединения с сервером. Проверьте интернет и попробуйте ещё раз.",
+      0,
+    );
+  }
 
   let payload: LeadApiResponse;
 
   try {
     payload = (await response.json()) as LeadApiResponse;
   } catch {
-    throw new LeadSubmitError("Ошибка ответа сервера", response.status);
+    throw new LeadSubmitError(
+      "Ошибка ответа сервера. Попробуйте ещё раз.",
+      response.status,
+    );
   }
 
   if (!response.ok || !payload.ok) {

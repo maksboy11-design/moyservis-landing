@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,7 @@ import {
   leadDefaultValues,
   leadSchema,
   type LeadInput,
-} from "@/schemas/lead";
+} from "@/schemas";
 import { LeadSubmitError, submitLead } from "./submit-lead";
 
 const deviceOptions = [
@@ -69,16 +70,19 @@ export function LeadForm({ className, onSuccess }: LeadFormProps) {
 
   const onSubmit = handleSubmit(async (values) => {
     setFormError(null);
+    setSuccessId(null);
 
     try {
       const result = await submitLead({
         ...values,
+        name: values.name.trim(),
+        phone: values.phone.trim(),
         message: values.message?.trim() ? values.message.trim() : undefined,
         website: values.website ?? "",
       });
+      reset(leadDefaultValues);
       setSuccessId(result.id);
       onSuccess?.(result.id);
-      reset(leadDefaultValues);
     } catch (error) {
       if (error instanceof LeadSubmitError) {
         setFormError(error.message);
@@ -86,7 +90,10 @@ export function LeadForm({ className, onSuccess }: LeadFormProps) {
           for (const [key, messages] of Object.entries(error.fieldErrors)) {
             const message = Array.isArray(messages) ? messages[0] : undefined;
             if (message) {
-              form.setError(key as keyof LeadInput, { message });
+              form.setError(key as keyof LeadInput, {
+                type: "server",
+                message,
+              });
             }
           }
         }
@@ -303,8 +310,19 @@ export function LeadForm({ className, onSuccess }: LeadFormProps) {
                       invalid={Boolean(fieldState.error)}
                     />
                   </FormControl>
-                  <FormFieldLabel required className="normal-case font-body font-medium tracking-normal leading-normal">
-                    Согласен на обработку персональных данных
+                  <FormFieldLabel
+                    required
+                    className="normal-case font-body font-medium tracking-normal leading-normal"
+                  >
+                    Согласен на{" "}
+                    <Link
+                      href="/privacy"
+                      className="text-action-primary underline-offset-2 hover:underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      обработку персональных данных
+                    </Link>
                   </FormFieldLabel>
                 </div>
                 <FormMessage />

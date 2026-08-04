@@ -1,4 +1,11 @@
 import { z } from "zod";
+import {
+  consentField,
+  honeypotField,
+  messageField,
+  nameField,
+  phoneField,
+} from "./fields";
 
 export const DEVICE_TYPES = [
   "phone",
@@ -15,37 +22,27 @@ export const CONTACT_PREFS = ["phone", "messenger"] as const;
 export type ContactPref = (typeof CONTACT_PREFS)[number];
 
 /**
- * Lead schema — shared by client (RHF) and server (Route Handler).
- * Ready for backend integration / Conversion stage notify adapters.
+ * Lead schema — single Zod source of truth for client (RHF) and server.
+ * Field rules live in schemas/fields.ts; compose here only.
  */
 export const leadSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, "Укажите имя")
-    .max(80, "Слишком длинное имя"),
-  phone: z
-    .string()
-    .trim()
-    .min(10, "Укажите телефон")
-    .max(20, "Слишком длинный телефон")
-    .regex(/^[+\d()\-\s]+$/, "Некорректный телефон"),
-  message: z.string().trim().max(1000, "Слишком длинное сообщение").optional(),
+  name: nameField,
+  phone: phoneField,
+  message: messageField,
   deviceType: z.enum(DEVICE_TYPES, {
     message: "Выберите тип устройства",
   }),
   contactPref: z.enum(CONTACT_PREFS, {
     message: "Выберите способ связи",
   }),
-  callback: z.boolean(),
-  consent: z.boolean().refine((value) => value === true, {
-    message: "Нужно согласие на обработку данных",
-  }),
-  /** Honeypot — must stay empty */
-  website: z.string().max(0).optional(),
+  callback: z.boolean({ error: "Некорректное значение" }),
+  consent: consentField,
+  website: honeypotField,
 });
 
 export type LeadInput = z.infer<typeof leadSchema>;
+
+export type LeadFieldErrors = Partial<Record<keyof LeadInput, string[]>>;
 
 export const leadDefaultValues: LeadInput = {
   name: "",
@@ -67,7 +64,7 @@ export type LeadApiSuccess = {
 export type LeadApiError = {
   ok: false;
   error: string;
-  fieldErrors?: Partial<Record<keyof LeadInput, string[]>>;
+  fieldErrors?: LeadFieldErrors;
 };
 
 export type LeadApiResponse = LeadApiSuccess | LeadApiError;

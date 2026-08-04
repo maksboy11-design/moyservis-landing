@@ -1,80 +1,99 @@
-import { notifyLeadStub } from "@/services/notify";
-import {
-  leadSchema,
-  type LeadApiResponse,
-  type LeadInput,
-} from "@/schemas/lead";
-import type { LeadPayload } from "@/domain/lead/types";
+import { createLead } from "@/services/lead/create-lead";
+import { BadRequestError, toErrorResponse, ValidationError } from "@/lib/errors";
+import { logger, startRequestTimer } from "@/lib/logger";
+import { validateLead } from "@/schemas";
 
 export const runtime = "nodejs";
 
-function toPayload(data: LeadInput): LeadPayload {
-  return {
-    name: data.name,
-    phone: data.phone,
-    message: data.message ? data.message : undefined,
-    deviceType: data.deviceType,
-    contactPref: data.contactPref,
-    callback: data.callback,
-    consent: data.consent,
-    channel: data.callback ? "callback" : "form",
-    source: "landing",
-  };
+function clientIp(request: Request): string | undefined {
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) {
+    const first = forwarded.split(",")[0]?.trim();
+    if (first) return first;
+  }
+  return request.headers.get("x-real-ip") ?? undefined;
+}
+
+function isHoneypotFilled(json: unknown): boolean {
+  if (!json || typeof json !== "object" || Array.isArray(json)) return false;
+  const website = (json as Record<string, unknown>).website;
+  return typeof website === "string" && website.trim().length > 0;
 }
 
 /**
- * POST /api/leads — backend-ready lead intake.
- * Validates with Zod, rejects honeypot, notifies via service adapter.
+ * POST /api/leads — thin HTTP boundary.
+ * Logs outcomes + durationMs; PII/secrets redacted by logger.
  */
 export async function POST(request: Request): Promise<Response> {
+  const timer = startRequestTimer();
+  const { requestId } = timer;
+  const ip = clientIp(request);
+
   let json: unknown;
 
   try {
     json = await request.json();
   } catch {
-    const body: LeadApiResponse = {
-      ok: false,
-      error: "Некорректный JSON",
-    };
-    return Response.json(body, { status: 400 });
+    logger.warn("lead.bad_json", {
+      requestId,
+      durationMs: timer.elapsed(),
+      ip,
+    });
+    const { body, status } = toErrorResponse(
+      new BadRequestError("Некорректный JSON"),
+    );
+    return Response.json(body, { status });
   }
 
-  const parsed = leadSchema.safeParse(json);
-
-  if (!parsed.success) {
-    const body: LeadApiResponse = {
-      ok: false,
-      error: "Проверьте поля формы",
-      fieldErrors: parsed.error.flatten().fieldErrors as Partial<
-        Record<keyof LeadInput, string[]>
-      >,
-    };
-    return Response.json(body, { status: 422 });
+  if (isHoneypotFilled(json)) {
+    logger.warn("lead.honeypot", {
+      requestId,
+      durationMs: timer.elapsed(),
+      ip,
+    });
+    return Response.json({ ok: true, id: crypto.randomUUID() }, { status: 201 });
   }
 
-  const payload = toPayload(parsed.data);
+  const validated = validateLead(json);
 
-  // Honeypot already enforced by schema (website max 0).
-  const notify = await notifyLeadStub(payload);
-
-  if (!notify.ok && notify.reason === "upstream_error") {
-    const body: LeadApiResponse = {
-      ok: false,
-      error: "Не удалось отправить заявку. Попробуйте позже.",
-    };
-    return Response.json(body, { status: 502 });
+  if (!validated.success) {
+    logger.warn("lead.validation_failed", {
+      requestId,
+      durationMs: timer.elapsed(),
+      emptyRequest: validated.emptyRequest,
+      fields: Object.keys(validated.fieldErrors),
+      ip,
+    });
+    const { body, status } = toErrorResponse(
+      new ValidationError(validated.error, validated.fieldErrors),
+    );
+    return Response.json(body, { status });
   }
 
-  // not_configured is OK in foundation — accept lead, log for Conversion stage
-  console.info("[lead]", {
-    ...payload,
-    notify: notify.ok ? "sent" : notify.reason,
-  });
+  try {
+    const result = await createLead(validated.data, {
+      requestId,
+      ip,
+      userAgent: request.headers.get("user-agent") ?? undefined,
+    });
 
-  const body: LeadApiResponse = {
-    ok: true,
-    id: crypto.randomUUID(),
-  };
+    logger.info("lead.request_complete", {
+      requestId,
+      id: result.id,
+      status: 201,
+      durationMs: timer.elapsed(),
+      outcome: "success",
+    });
 
-  return Response.json(body, { status: 201 });
+    return Response.json({ ok: true, id: result.id }, { status: 201 });
+  } catch (error) {
+    const { body, status } = toErrorResponse(error);
+    logger.exception("lead.request_failed", error, {
+      requestId,
+      durationMs: timer.elapsed(),
+      status,
+      ip,
+    });
+    return Response.json(body, { status });
+  }
 }

@@ -3,6 +3,9 @@
 .next-out
 out
 
+# Vercel
+.vercel
+
 # Node
 node_modules
 npm-debug.log*
@@ -28,3 +31,4 @@ build-out.txt
 
 # TypeScript
 *.tsbuildinfo
+.env*

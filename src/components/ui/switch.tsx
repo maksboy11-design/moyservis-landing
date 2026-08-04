@@ -55,9 +55,11 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
         aria-invalid={invalid || undefined}
         aria-label={label}
         disabled={disabled}
+        data-slot="switch"
         data-state={isOn ? "checked" : "unchecked"}
         className={cn(
-          "relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-pill",
+          // Track size: form-controls.css — avoid w-12/h-7 (theme spacing-12 = 96px).
+          "relative inline-flex shrink-0 cursor-pointer items-center rounded-pill",
           "border border-transparent bg-neutral-700",
           "transition-[background-color,box-shadow]",
           "duration-[var(--motion-duration-fast)] ease-[var(--motion-easing-standard)]",
@@ -78,10 +80,10 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       >
         <span
           aria-hidden
+          data-slot="switch-thumb"
           className={cn(
-            "pointer-events-none block size-5 translate-x-1 rounded-pill bg-neutral-0 shadow-sm",
+            "pointer-events-none block rounded-pill bg-neutral-0 shadow-sm",
             "transition-transform duration-[var(--motion-duration-fast)] ease-[var(--motion-easing-standard)]",
-            isOn && "translate-x-6",
           )}
         />
       </button>

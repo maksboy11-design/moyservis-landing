@@ -33,16 +33,16 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         aria-invalid={invalid || undefined}
         disabled={disabled}
         className={cn(
+          // Checked fill + checkmark: see form-controls.css (data-slot=checkbox).
+          // Do not put data-URL bg utilities here — quotes break the class attribute
+          // and tailwind-merge drops checked:bg-action-primary against bg-[image].
           "size-5 shrink-0 cursor-pointer appearance-none rounded-xs",
-          "border border-border-strong bg-surface",
+          "border border-border-strong",
           "transition-[background-color,border-color,box-shadow]",
           "duration-[var(--motion-duration-fast)] ease-[var(--motion-easing-standard)]",
-          "checked:border-action-primary checked:bg-action-primary",
           "focus-visible:outline-none focus-visible:shadow-focus",
           "disabled:cursor-not-allowed disabled:opacity-[var(--opacity-disabled)]",
           invalid && "border-error",
-          "checked:bg-[image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3.5 8.5 6.5 11.5 12.5 4.5' stroke='%23111111' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")]",
-          "checked:bg-[length:0.875rem] checked:bg-center checked:bg-no-repeat",
           className,
         )}
         {...props}

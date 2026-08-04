@@ -26,20 +26,27 @@ const securityHeaders = [
 ];
 
 const isDevCli = process.argv.includes("dev");
+// Vercel/CI expect the default `.next` output directory.
+const isHostedBuild =
+  process.env.VERCEL === "1" || process.env.CF_PAGES === "1";
 
 const nextConfig: NextConfig = {
-  // Dev (turbopack) → `.next`; `next build` / `next start` → `.next-out`.
-  // Splitting avoids OneDrive readlink corruption + turbopack/webpack clashes.
-  distDir: process.env.NEXT_DIST_DIR || (isDevCli ? ".next" : ".next-out"),
+  // Local: turbopack → `.next`; `next build`/`start` → `.next-out`
+  // (avoids OneDrive + turbopack/webpack clashes). Hosted platforms → `.next`.
+  distDir:
+    process.env.NEXT_DIST_DIR ||
+    (isHostedBuild || isDevCli ? ".next" : ".next-out"),
   reactStrictMode: true,
   outputFileTracingRoot: path.resolve(process.cwd()),
   poweredByHeader: false,
   images: {
+    // Assets are already WebP under /public/images. On Vercel the
+    // `/_next/image` optimizer returned 404 (broken by services deploy
+    // output), while direct `/images/*` URLs work — serve them as-is.
+    unoptimized: true,
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    // Remote CDNs removed: landing media is local under /public/images.
-    // Remote fetch via /_next/image caused 504 when upstream was unreachable.
   },
   async headers() {
     return [

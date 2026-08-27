@@ -66,7 +66,7 @@ export const mastersContent = {
       {
         id: "stock",
         src: "/images/workshop/stock.webp",
-        alt: "Склад комплектующих сервисного центра",
+        alt: "Рабочее место мастера: разобранный смартфон, паяльная станция, осциллограф и микроскоп",
       },
     ] satisfies readonly WorkshopImage[],
   },

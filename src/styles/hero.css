@@ -214,9 +214,12 @@
 }
 
 .ticker-bar__track {
+  --ticker-copies: 6;
+  --ticker-loop-gap: 1.5rem;
   display: flex;
   width: max-content;
   align-items: center;
+  /* gap on track would break -100%/N seamlessness — gap lives on group end */
   gap: 0;
   animation: hero-ticker 36s linear infinite;
   will-change: transform;
@@ -227,7 +230,9 @@
   flex-shrink: 0;
   align-items: center;
   gap: 0.85rem;
-  padding-inline: 1.25rem;
+  /* Single trailing gap = constant space before next copy; included in segment width */
+  padding-inline: 0;
+  padding-inline-end: var(--ticker-loop-gap);
   white-space: nowrap;
 }
 
@@ -248,12 +253,16 @@
   opacity: 0.55;
 }
 
+/*
+ * Move exactly one segment (phrase + loop gap).
+ * With N equal flex children, -100%/N == width of one group → seamless reset.
+ */
 @keyframes hero-ticker {
   from {
     transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translate3d(-50%, 0, 0);
+    transform: translate3d(calc(-100% / var(--ticker-copies)), 0, 0);
   }
 }
 

@@ -1,23 +1,31 @@
-import type { HTMLAttributes } from "react";
+import type { CSSProperties, HTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
 export type TickerBarProps = HTMLAttributes<HTMLDivElement> & {
   items: readonly string[];
-  /** Repeat groups for seamless marquee loop */
+  /**
+   * Identical loop segments on the track.
+   * Must be ≥2. Higher values keep the viewport filled when one phrase
+   * is narrower than the screen (ultrawide / desktop).
+   */
   repeats?: number;
 };
 
 /**
  * Lime informational ticker under Hero (refs).
- * CSS marquee — pauses under prefers-reduced-motion.
+ * Seamless CSS marquee — pauses under prefers-reduced-motion.
+ *
+ * Track = N equal segments; animation moves exactly -100%/N so the next
+ * segment lands where the first was (no empty gap, no jump).
  */
 export function TickerBar({
   items,
-  repeats = 2,
+  repeats = 6,
   className,
   ...props
 }: TickerBarProps) {
-  const groups = Array.from({ length: Math.max(2, repeats) }, (_, index) => index);
+  const copyCount = Math.max(2, repeats);
+  const groups = Array.from({ length: copyCount }, (_, index) => index);
 
   return (
     <div
@@ -26,7 +34,14 @@ export function TickerBar({
       {...props}
     >
       <div className="ticker-bar__viewport">
-        <div className="ticker-bar__track">
+        <div
+          className="ticker-bar__track"
+          style={
+            {
+              "--ticker-copies": copyCount,
+            } as CSSProperties
+          }
+        >
           {groups.map((group) => (
             <div
               key={group}
@@ -34,7 +49,7 @@ export function TickerBar({
               aria-hidden={group > 0 || undefined}
             >
               {items.map((item, index) => (
-                <span key={`${group}-${item}`} className="contents">
+                <span key={`${group}-${index}-${item}`} className="contents">
                   {index > 0 ? (
                     <span className="ticker-bar__sep" aria-hidden />
                   ) : null}

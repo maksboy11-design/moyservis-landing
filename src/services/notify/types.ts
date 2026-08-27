@@ -15,12 +15,7 @@ export type LeadNotifyEvent = {
   channel: NonNullable<LeadPayload["channel"]>;
 };
 
-export type NotifyChannel =
-  | "telegram"
-  | "email"
-  | "webhook"
-  | "bitrix24"
-  | "amocrm";
+export type NotifyChannel = "max" | "email";
 
 export type AdapterAttemptResult = {
   channel: NotifyChannel;

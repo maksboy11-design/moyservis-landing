@@ -1,14 +1,7 @@
 /**
- * Notify facade — PRD ch.8 + Stage 1 stack.
+ * Notify facade — delivers accepted leads to configured channels.
  *
- * v1 channels (activate via env):
- * - Telegram Bot API (primary for owner alerts)
- * - Email via Resend
- * - Generic webhook / REST
- * - Bitrix24 incoming webhook
- * - amoCRM API v4
- *
- * Fan-out: all configured adapters run in parallel.
+ * Primary channel: MAX Bot (MAX_BOT_TOKEN + MAX_CHAT_ID).
  * Success if ≥1 configured channel succeeds.
  * not_configured if none enabled (lead still accepted by LeadService).
  * upstream_error if all configured channels fail.
@@ -17,26 +10,13 @@
  */
 
 import { logger } from "@/lib/logger";
-import { amocrmAdapter } from "./amocrm";
-import { bitrix24Adapter } from "./bitrix24";
 import { buildLeadNotifyEvent } from "./format";
-import { resendAdapter } from "./resend";
-import { telegramAdapter } from "./telegram";
+import { emailAdapter } from "./email";
+import { maxAdapter } from "./max";
 import type { LeadPayload } from "@/domain/lead/types";
-import type {
-  AdapterAttemptResult,
-  NotifyAdapter,
-  NotifyLeadResult,
-} from "./types";
-import { webhookAdapter } from "./webhook";
+import type { AdapterAttemptResult, NotifyAdapter, NotifyLeadResult } from "./types";
 
-const adapters: NotifyAdapter[] = [
-  telegramAdapter,
-  resendAdapter,
-  webhookAdapter,
-  bitrix24Adapter,
-  amocrmAdapter,
-];
+const adapters: NotifyAdapter[] = [maxAdapter, emailAdapter];
 
 function summarizeChannels(channels: AdapterAttemptResult[]) {
   return channels.map((c) => ({
@@ -102,5 +82,4 @@ export async function notifyLead(
 }
 
 export type { LeadNotifyEvent, NotifyLeadResult, AdapterAttemptResult } from "./types";
-export { buildLeadNotifyEvent, formatLeadMessage, toLeadIntegrationPayload } from "./format";
-export { verifyWebhookSignature } from "./webhook";
+export { buildLeadNotifyEvent, formatLeadMessage } from "./format";

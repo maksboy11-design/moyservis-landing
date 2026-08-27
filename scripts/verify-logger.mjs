@@ -82,10 +82,9 @@ const sample = sanitizeFields({
   message: "Сломался экран",
   password: "super-secret",
   apiKey: "re_1234567890",
-  TELEGRAM_BOT_TOKEN: "123456:ABC-DEF",
+  MAX_BOT_TOKEN: "max_secret_token_value_1234567890",
   authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.payload.sig",
-  url: "https://api.telegram.org/bot123456:AAHxxx/sendMessage",
-  bitrix: "https://portal.bitrix24.ru/rest/1/abcsecrettoken/crm.lead.add.json",
+  url: "https://platform-api2.max.ru/messages?chat_id=1",
   durationMs: 42,
   requestId: "req-1",
 });
@@ -99,15 +98,15 @@ const cases = [
   ["masks message length only", sample.message === "[len:14]"],
   ["redacts password", sample.password === "[REDACTED]"],
   ["redacts apiKey", sample.apiKey === "[REDACTED]"],
-  ["redacts bot token field", sample.TELEGRAM_BOT_TOKEN === "[REDACTED]"],
+  ["redacts max bot token field", sample.MAX_BOT_TOKEN === "[REDACTED]"],
   ["redacts authorization", sample.authorization === "[REDACTED]"],
-  ["redacts telegram url token", !String(sample.url).includes("AAHxxx") && String(sample.url).includes("/bot***")],
-  ["redacts bitrix webhook token", String(sample.bitrix).includes("/rest/***/***")],
+  ["keeps max api host", String(sample.url).includes("platform-api2.max.ru")],
   ["keeps durationMs", sample.durationMs === 42],
   ["no raw phone in JSON", !line.includes("900") && !line.includes("123-45")],
   ["no raw name in JSON", !line.includes("Петров")],
   ["no raw password in JSON", !line.includes("super-secret")],
   ["no bearer token in JSON", !line.includes("eyJhbGci")],
+  ["no max token in JSON", !line.includes("max_secret_token")],
 ];
 
 let failed = 0;

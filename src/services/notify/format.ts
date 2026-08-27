@@ -34,7 +34,7 @@ export function buildLeadNotifyEvent(
   };
 }
 
-/** Human-readable message for Telegram / email body. */
+/** Human-readable fallback / debug message (MAX uses formatMaxLeadMessage). */
 export function formatLeadMessage(event: LeadNotifyEvent): string {
   const lines = [
     "Новая заявка — МойСервис",
@@ -55,29 +55,4 @@ export function formatLeadMessage(event: LeadNotifyEvent): string {
   }
 
   return lines.join("\n");
-}
-
-/** JSON body for webhook / generic REST consumers. */
-export function toLeadIntegrationPayload(event: LeadNotifyEvent) {
-  return {
-    id: event.id,
-    createdAt: event.createdAt,
-    source: event.source,
-    channel: event.channel,
-    contact: {
-      name: event.name,
-      phone: event.phone,
-      preferred: event.contactPref,
-    },
-    request: {
-      deviceType: event.deviceType,
-      callback: event.callback,
-      message: event.message ?? null,
-    },
-    consent: event.consent,
-    labels: {
-      deviceType: DEVICE_LABELS[event.deviceType],
-      contactPref: CONTACT_LABELS[event.contactPref],
-    },
-  };
 }

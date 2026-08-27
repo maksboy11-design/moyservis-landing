@@ -26,7 +26,7 @@
 | Motion | **CSS + Framer Motion (точечно)** или CSS-only reveals | Контроль perf |
 | Forms | Server Action / Route Handler | Без тяжёлого BFF |
 | Validation | **Zod** | Типобезопасные формы |
-| Email/Notify | Resend / SMTP / Telegram bot webhook | Уведомление владельцу |
+| Email/Notify | Локальный SMTP Mail Service / MAX Bot | Уведомление владельцу без внешнего email API |
 | Analytics | YM + optional GA (consent) | РФ-контекст: Метрика приоритетнее |
 | Hosting | Vercel / Cloudflare Pages / VPS Nginx | HTTPS обязателен |
 | Images | `next/image` + WebP/AVIF | LCP |

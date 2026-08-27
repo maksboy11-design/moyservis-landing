@@ -138,8 +138,8 @@ Native `scroll-behavior: smooth` + offset header достаточно для tru
 |---------|---------|
 | Lead intake | Route Handler `POST /api/lead` или Server Action |
 | Validation | Zod (`schemas/lead`) |
-| Notify | Telegram Bot API и/или email (Resend) |
-| Persistence | optional (можно без DB в v1) |
+| Notify | MAX Bot и локальный SMTP Mail Service |
+| Persistence | SQLite WAL для персистентной очереди писем |
 | Spam | honeypot + rate limit; Turnstile — if needed |
 | CMS | нет в v1 |
 

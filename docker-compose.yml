@@ -1,0 +1,112 @@
+name: moyservis
+
+services:
+  data-init:
+    image: alpine:3.22
+    command: ["sh", "-c", "chown 1001:1001 /data && chmod 0770 /data"]
+    volumes:
+      - app-data:/data
+    restart: "no"
+
+  mailpit:
+    image: axllent/mailpit:v1.27
+    environment:
+      MP_DATABASE: /data/mailpit.sqlite
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    volumes:
+      - app-data:/data
+    depends_on:
+      data-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      target: web
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      NEXT_DIST_DIR: .next
+      SITE_URL: ${SITE_URL:-http://localhost:3000}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+      MAIL_ENABLED: ${MAIL_ENABLED:-true}
+      MAIL_FROM: ${MAIL_FROM:-Мой Сервис <no-reply@example.com>}
+      MAIL_REPLY_TO: ${MAIL_REPLY_TO:-service@example.com}
+      MAIL_ADMIN_TO: ${MAIL_ADMIN_TO:-service@example.com}
+      MAIL_QUEUE_PATH: /data/mail-queue.sqlite
+      MAIL_HEALTH_TOKEN: ${MAIL_HEALTH_TOKEN:-}
+      SMTP_HOST: ${SMTP_HOST:-mailpit}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_REQUIRE_TLS: ${SMTP_REQUIRE_TLS:-false}
+      SMTP_TLS_REJECT_UNAUTHORIZED: ${SMTP_TLS_REJECT_UNAUTHORIZED:-true}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+    ports:
+      - "3000:3000"
+    volumes:
+      - app-data:/data
+    depends_on:
+      data-init:
+        condition: service_completed_successfully
+      mailpit:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      target: worker
+    environment:
+      NODE_ENV: production
+      MAIL_ENABLED: ${MAIL_ENABLED:-true}
+      MAIL_FROM: ${MAIL_FROM:-Мой Сервис <no-reply@example.com>}
+      MAIL_REPLY_TO: ${MAIL_REPLY_TO:-service@example.com}
+      MAIL_ADMIN_TO: ${MAIL_ADMIN_TO:-service@example.com}
+      MAIL_QUEUE_PATH: /data/mail-queue.sqlite
+      MAIL_WORKER_CONCURRENCY: ${MAIL_WORKER_CONCURRENCY:-4}
+      MAIL_POLL_INTERVAL_MS: ${MAIL_POLL_INTERVAL_MS:-1000}
+      MAIL_LEASE_MS: ${MAIL_LEASE_MS:-60000}
+      MAIL_MAX_ATTEMPTS: ${MAIL_MAX_ATTEMPTS:-8}
+      MAIL_BASE_RETRY_MS: ${MAIL_BASE_RETRY_MS:-5000}
+      MAIL_MAX_RETRY_MS: ${MAIL_MAX_RETRY_MS:-3600000}
+      MAIL_RETENTION_MS: ${MAIL_RETENTION_MS:-604800000}
+      SMTP_HOST: ${SMTP_HOST:-mailpit}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_REQUIRE_TLS: ${SMTP_REQUIRE_TLS:-false}
+      SMTP_TLS_REJECT_UNAUTHORIZED: ${SMTP_TLS_REJECT_UNAUTHORIZED:-true}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+    volumes:
+      - app-data:/data
+    depends_on:
+      data-init:
+        condition: service_completed_successfully
+      mailpit:
+        condition: service_healthy
+    init: true
+    restart: unless-stopped
+
+volumes:
+  app-data:

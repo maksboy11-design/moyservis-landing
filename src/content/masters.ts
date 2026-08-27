@@ -53,15 +53,15 @@ export const mastersContent = {
     lead: "Оборудованные рабочие места: микроскопы, схемы и антистатическая зона.",
     images: [
       {
-        id: "bench",
-        src: "/images/workshop/bench.webp",
-        alt: "Рабочее место инженера МойСервис: антистатический стол, микроскоп, осциллограф и инструмент",
+        id: "desk",
+        src: "/images/workshop/desk.webp",
+        alt: "Рабочее место инженера: микроскоп, паяльная станция, мультиметр и антистатический стол",
         featured: true,
       },
       {
-        id: "desk",
-        src: "/images/workshop/desk.webp",
-        alt: "Рабочий стол инженера",
+        id: "bench",
+        src: "/images/workshop/bench.webp",
+        alt: "Мастерская МойСервис: ряд рабочих мест с микроскопами и инструментальной стеной",
       },
       {
         id: "stock",
